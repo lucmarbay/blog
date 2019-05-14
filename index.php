@@ -13,10 +13,10 @@ and open the template in the editor.
                 text-align: center;
             }
             #iniciar{
-                margin-left: 42%;     
+                text-align: center;
             }
             #registrar{
-                margin-left: 35%;
+                text-align: center;
             }
             form{
                 margin-top: 40px;
@@ -27,27 +27,15 @@ and open the template in the editor.
     <body>
         <?php
         session_start();
+        require_once(dirname(__FILE__).'\modelo\Conexion.php');
+        require_once(dirname(__FILE__).'\controlador\Usuario_controlador.php');
+        $conectar=new Conexion();
+        $conectar->crearBaseDeDatosBlog();
+        $conectar->crearTablasBlog();
+        $usuario_controlador=new Usuario_controlador();
+        $usuario_controlador->verificarUsuario();
+        $usuario_controlador->registrarUsuario();
         ?>
-        <h1>INICIAR SESION</h1>
-        <hr size="1px" color="black" />
-        <form id="iniciar" action="contenido.php" method="post">
-            Email: <input type="email" required="required" placeholder="Introduce Email"><br>
-            Password: <input type="text" required="required" placeholder="Introduce Password"><br>
-            <input type="submit" value="Entrar">
-        </form>
-        <h1>REGISTRO DE NUEVO USUARIO</h1>
-        <hr size="1px" color="black" />
-        <form id="registrar" action="registro.php" method="post">
-            Email: <input type="email" required="required" placeholder="Introduce Email"><br>
-            Password: <input type="text" required="required" placeholder="Introduce Password"><br>
-            Nombre: <input type="text" required="required" placeholder="Introduce tu Nombre"><br>
-            Fecha de nacimiento: <input type="date" required="required"><br>
-            Sexo: <select name="sexo">
-                <option value="0">Masculino</option>
-                <option value="1">Femenino</option>
-                </select><br>
-            Foto: <input type="file"><br>
-            <input type="submit" value="Registrar">
-        </form>
+        
     </body>
 </html>
