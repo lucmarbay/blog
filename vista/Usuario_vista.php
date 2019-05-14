@@ -26,4 +26,8 @@ class Usuario_vista{
             <input type="submit" value="Registrar">
         </form>';
     }
+    function mostrarCabecera($nombre, $foto) {
+        echo "<div class='divTitulo'><h1>Blog #Práctica PHP</h1><button><a href='index.php'>Inicio</a></button></div>
+        <div class='divUsuario'><img alt='".$foto."' src='/blog/imagen/".$foto."' width='70px'><p>$nombre</p><a href='desconectar.php'>Cerrar Sesion</a></div>";
+    }
 }

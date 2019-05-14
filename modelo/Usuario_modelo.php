@@ -18,13 +18,51 @@ class Usuario_modelo {
             call_user_func_array(array($this, $funcion_constructor), $params);
         }
     }
-    public function __construct2($email, $password) {
-        require_once(dirname(__FILE__) . '\Conexion.php');
-        $conectar = new Conexion();
-        $this->db = $conectar->ObtenerConexion();
-        $this->email = $email;
-        $this->password = $password;
+    public function __construct1($email) {
+        try {
+            require_once(dirname(__FILE__) . '\Conexion.php');
+            $conectar = new Conexion();
+            $this->db = $conectar->ObtenerConexion();
+            $this->email = $email;
+            //Cargamos el id del usuario
+            $sqlConsultarUsuario = "SELECT * FROM usuarios WHERE email= :email";
+            $resultado = $this->db->prepare($sqlConsultarUsuario);
+            $resultado->execute(array(":email" => $this->email));
+            while ($registro = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                $this->password = $registro['pass'];
+                $this->nombre = $registro['nombre'];
+                $this->fechaNacimiento = $registro['fechanac'];
+                $this->sexo = $registro['sexo'];
+                $this->foto = $registro['foto'];
+            }
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
     }
+    public function __construct2($email, $password) {
+        try {
+            require_once(dirname(__FILE__) . '\Conexion.php');
+            $conectar = new Conexion();
+            $this->db = $conectar->ObtenerConexion();
+            $this->email = $email;
+            $this->password = $password;
+            //Cargamos el id del usuario
+            $sqlConsultarUsuario = "SELECT * FROM usuarios WHERE email= :email";
+            $resultado = $this->db->prepare($sqlConsultarUsuario);
+            $resultado->execute(array(":email" => $this->email));
+            while ($registro = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                $this->nombre = $registro['nombre'];
+                $this->fechaNacimiento = $registro['fechanac'];
+                $this->sexo = $registro['sexo'];
+                $this->foto = $registro['foto'];
+            }
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
+    }
+
     public function __construct6($email, $password, $nombre, $fechaNacimiento, $sexo, $foto) {
         require_once(dirname(__FILE__) . '\Conexion.php');
         $conectar = new Conexion();
@@ -35,6 +73,26 @@ class Usuario_modelo {
         $this->fechaNacimiento = $fechaNacimiento;
         $this->sexo = $sexo;
         $this->foto = $foto;
+    }
+
+    function getEmail() {
+        return $this->email;
+    }
+
+    function getNombre() {
+        return $this->nombre;
+    }
+
+    function getFechaNacimiento() {
+        return $this->fechaNacimiento;
+    }
+
+    function getSexo() {
+        return $this->sexo;
+    }
+
+    function getFoto() {
+        return $this->foto;
     }
 
     public function insertarUsuario() {

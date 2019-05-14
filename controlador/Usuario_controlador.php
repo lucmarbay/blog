@@ -12,7 +12,7 @@ class Usuario_controlador {
         $this->usuario_vista = new Usuario_vista();
     }
 
-    function verificarUsuario() {
+    public function verificarUsuario() {
         try {
             $this->usuario_vista->mostrarLogin();
             if (isset($_REQUEST['nombreLogin']) && isset($_REQUEST['passwordLogin'])) {
@@ -20,6 +20,7 @@ class Usuario_controlador {
                 $password = htmlentities(addslashes($_REQUEST['passwordLogin']));
                 $this->usuario_modelo= new Usuario_modelo($email, $password);
                 if($this->usuario_modelo->verificarUsuario()){
+                    $_SESSION['usuario']=$email;
                     header("Location:contenido.php");
                 } else{
                     echo 'Usuario no registrado';
@@ -31,7 +32,7 @@ class Usuario_controlador {
         }
     }
 
-    function registrarUsuario() {
+    public function registrarUsuario() {
         $this->usuario_vista->mostrarRegistro();
         if (isset($_REQUEST['emailRegistro']) && isset($_REQUEST['passwordRegistro']) && isset($_REQUEST['nombreRegistro']) && isset($_REQUEST['fechaRegistro']) && isset($_REQUEST['sexoRegistro']) && $_FILES['fotoRegistro']['error'] === UPLOAD_ERR_OK) {
             $contrasenia = $_REQUEST["passwordRegistro"];
@@ -41,9 +42,22 @@ class Usuario_controlador {
             move_uploaded_file($_FILES['fotoRegistro']['tmp_name'], $carpetaImagen . $nombreFoto);
             $this->usuario_modelo = new Usuario_modelo($_REQUEST['emailRegistro'], $pass_cifrado, $_REQUEST['nombreRegistro'], $_REQUEST['fechaRegistro'], $_REQUEST['sexoRegistro'], $nombreFoto);
             $this->usuario_modelo->insertarUsuario();
-        } else {
-            echo 'No se ha podido realizar el registro.';
+            echo 'Registro realizado correctamente';
         }
+        
     }
+    public function mantenerUsuario_modelo($usuario) {
+        $this->usuario_modelo= new Usuario_modelo($usuario);
+    }
+    
+    public function mostrarCabecera(){
+        $nombre=  $this->usuario_modelo->getNombre();
+        $foto=  $this->usuario_modelo->getFoto();
+        $this->usuario_vista->mostrarCabecera($nombre, $foto);
+    }
+    function getUsuario_modelo() {
+        return $this->usuario_modelo;
+    }
+
 
 }
