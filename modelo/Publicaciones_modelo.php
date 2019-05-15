@@ -35,6 +35,7 @@ class Publicaciones_modelo {
             $numComentarios= "0";//Tengo que hacer un inner join para sacar el numero de comentarios
             $fecha= $this->listaPublicaciones['fecha'];
             $email= $this->listaPublicaciones['email'];
+            $texto= $this->listaPublicaciones['texto'];
             $sql="SELECT nombre, foto FROM usuarios WHERE email=:email;";
             $resultado = $this->db->prepare($sql);
             $resultado->execute(array(":email" => $email));

@@ -12,10 +12,11 @@ class Publicaciones_controlador{
     }
     function mostrarPublicacionesInicio(){
         $this->publicacionesModelo->recopilarPublicacionesInicio();
-        $array= $this->publicacionesModelo->mostrarPublicacionesInicio();
-        foreach ($array as $key => $value) {
-            //Tengo que guardar el array con los datos de esta publicacion en las variables que paso por parametros en el metodo de abajo
+        $listadePublicaciones=$this->publicacionesModelo->getListaPublicaciones();
+        while($listadePublicaciones){
+            
         }
-        $this->publicacionesVista->mostrarPublicaciones($foto, $nombre, $fecha, $texto, $numComentarios);
+        $array= $this->publicacionesModelo->mostrarPublicacionesInicio();
+        $this->publicacionesVista->mostrarPublicaciones($array);
     }
 }

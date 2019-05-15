@@ -32,6 +32,9 @@
                 right: 200px;
                 left: 200px;
             }
+            .textoPublicacion{
+                background-color: 8cfbf3;
+            }
         </style>
     </head>
     <body>
@@ -50,7 +53,7 @@
         <div class="cuerpoCentral">
             <?php
             $usuarioControlador->publicarPublicacion();
-            $publicacionesControlador->mostrarPublicaciones();
+            $publicacionesControlador->mostrarPublicacionesInicio();
             ?>
 
         </div>
