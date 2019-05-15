@@ -27,7 +27,15 @@ class Usuario_vista{
         </form>';
     }
     function mostrarCabecera($nombre, $foto) {
-        echo "<div class='divTitulo'><h1>Blog #Práctica PHP</h1><button><a href='index.php'>Inicio</a></button></div>
-        <div class='divUsuario'><img alt='".$foto."' src='/blog/imagen/".$foto."' width='70px'><p>$nombre</p><a href='desconectar.php'>Cerrar Sesion</a></div>";
+        echo "<div class='divTitulo'><h1>Blog #Práctica PHP</h1><button class='botonInicio'><a class='enlaceInicio' href='contenido.php'>Inicio</a></button></div>
+        <div class='divUsuario'><img class='avatar' alt='".$foto."' src='/blog/imagen/".$foto."' width='100px'><p>$nombre</p><a href='logout.php'>Cerrar Sesion</a></div>";
+    }
+    function publicarComentario() {
+        echo '<hr size="1px" color="black" />
+        <form action="contenido.php" method="POST">
+            <textarea rows="4" cols="50" name="publicacion">¿Qué estas pensando?</textarea></br>
+            <input class="botonDerecha" type="submit" value="Publicar">
+        </form></br>
+        <hr size="1px" color="black" />';
     }
 }

@@ -35,7 +35,7 @@ class Usuario_controlador {
     public function registrarUsuario() {
         $this->usuario_vista->mostrarRegistro();
         if (isset($_REQUEST['emailRegistro']) && isset($_REQUEST['passwordRegistro']) && isset($_REQUEST['nombreRegistro']) && isset($_REQUEST['fechaRegistro']) && isset($_REQUEST['sexoRegistro']) && $_FILES['fotoRegistro']['error'] === UPLOAD_ERR_OK) {
-            $contrasenia = $_REQUEST["passwordRegistro"];
+            $contrasenia = htmlentities(addslashes($_REQUEST["passwordRegistro"]));
             $pass_cifrado = password_hash($contrasenia, PASSWORD_DEFAULT);
             $nombreFoto = $_FILES['fotoRegistro']['name'];
             $carpetaImagen = $_SERVER['DOCUMENT_ROOT'] . '/blog/imagen/';
@@ -58,6 +58,16 @@ class Usuario_controlador {
     function getUsuario_modelo() {
         return $this->usuario_modelo;
     }
-
+    function publicarPublicacion() {
+        $this->usuario_vista->publicarComentario();
+        if(isset($_REQUEST['publicacion'])){
+            $publicacion=htmlentities(addslashes($_REQUEST['publicacion']));
+            $this->usuario_modelo= new Usuario_modelo($_SESSION['usuario']);
+            $this->usuario_modelo->insertarPublicacion($publicacion);
+        }
+    }
+    function mostrarPublicaciones(){
+        
+    }
 
 }

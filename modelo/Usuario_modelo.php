@@ -18,6 +18,7 @@ class Usuario_modelo {
             call_user_func_array(array($this, $funcion_constructor), $params);
         }
     }
+
     public function __construct1($email) {
         try {
             require_once(dirname(__FILE__) . '\Conexion.php');
@@ -40,6 +41,7 @@ class Usuario_modelo {
             echo 'Línea del error: ' . $ex->getLine();
         }
     }
+
     public function __construct2($email, $password) {
         try {
             require_once(dirname(__FILE__) . '\Conexion.php');
@@ -118,6 +120,19 @@ class Usuario_modelo {
                 }
             }
             return $existeUsuario;
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
+    }
+
+    public function insertarPublicacion($publicacion) {
+        try {
+            $sqlPublicacion = "INSERT INTO publicaciones (email, texto, fecha) VALUES (:email, :texto, :fecha)";
+            $insertar = $this->db->prepare($sqlPublicacion);
+            date_default_timezone_set('Europe/Madrid');
+            $fecha =date('Y-m-d H:i:s');
+            $insertar->execute(array(":email" => $this->email, ":texto" => $publicacion, "fecha" => $fecha));
         } catch (Exception $ex) {
             die('Error' . $ex->getMessage());
             echo 'Línea del error: ' . $ex->getLine();
