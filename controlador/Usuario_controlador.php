@@ -66,8 +66,5 @@ class Usuario_controlador {
             $this->usuario_modelo->insertarPublicacion($publicacion);
         }
     }
-    function mostrarPublicaciones(){
-        
-    }
 
 }

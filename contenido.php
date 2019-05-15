@@ -32,14 +32,16 @@
             header("Location:index.php");
         }
         require_once(dirname(__FILE__) . '\controlador\Usuario_controlador.php');
+        require_once(dirname(__FILE__) . '\controlador\Publicaciones_controlador.php');
         $usuarioControlador = new Usuario_controlador();
+        $publicacionesControlador = new Publicaciones_controlador();
         $usuarioControlador->mantenerUsuario_modelo($_SESSION['usuario']);
         $usuarioControlador->mostrarCabecera();
         ?>
         <div class="cuerpoCentral">
             <?php
             $usuarioControlador->publicarPublicacion();
-            $usuarioControlador->mostrarPublicaciones();
+            $publicacionesControlador->mostrarPublicaciones();
             ?>
 
         </div>
