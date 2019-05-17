@@ -12,11 +12,6 @@ class Publicaciones_controlador{
     }
     function mostrarPublicacionesInicio(){
         $this->publicacionesModelo->recopilarPublicacionesInicio();
-        $listadePublicaciones=$this->publicacionesModelo->getListaPublicaciones();
-        while($listadePublicaciones){
-            
-        }
-        $array= $this->publicacionesModelo->mostrarPublicacionesInicio();
-        $this->publicacionesVista->mostrarPublicaciones($array);
+        
     }
 }
