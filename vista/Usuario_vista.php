@@ -33,7 +33,7 @@ class Usuario_vista{
     function publicarComentario() {
         echo '<hr size="1px" color="black" />
         <form action="contenido.php" method="POST">
-            <textarea rows="4" cols="50" name="publicacion">¿Qué estas pensando?</textarea></br>
+            <textarea rows="5" cols="70" name="publicacion">¿Qué estas pensando?</textarea></br>
             <input class="botonDerecha" type="submit" value="Publicar">
         </form></br>
         <hr size="1px" color="black" />';
