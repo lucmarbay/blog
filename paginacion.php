@@ -1,8 +1,8 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
-        <style>
+        <title></title><style>
             .divTitulo{
                 position: fixed;
                 top: 5px;
@@ -55,15 +55,8 @@
         ?>
         <div class="cuerpoCentral">
             <?php
-            $usuarioControlador->publicarPublicacion();
-            $publicacionesControlador->mostrarPublicacionesInicio();
-            $publicacionesControlador->mostrarPaginacion();
+            $publicacionesControlador->paginacion();
             ?>
-            
         </div>
-        
-
-
-
     </body>
 </html>

@@ -14,4 +14,10 @@ class Publicaciones_controlador{
         $this->publicacionesModelo->recopilarPublicacionesInicio();
         
     }
+    function mostrarPaginacion() {
+        $this->publicacionesVista->enlacePaginacion();
+    }
+    function paginacion(){
+        $this->publicacionesModelo->paginacion();
+    }
 }

@@ -21,18 +21,33 @@ class Publicaciones_modelo {
     }
 
     function hacerYMostrarComentarios($idpub) {
-        $this->hacerComentario($idpub);
+        echo '<div class="cuerpoComentarios">';
         $this->insertarComentarios($idpub);
         $this->mostrarComentarios($idpub);
+        $this->hacerComentario($idpub);
+        echo '</div>';
     }
 
     function hacerComentario($idpub) {
-        echo '<hr size="1px" color="black" />
-        <form action="contenido.php" method="POST">
+        try {
+            $email = $_SESSION['usuario'];
+            $sqlFoto = "SELECT foto FROM usuarios WHERE email=:email";
+            $resultado = $this->db->prepare($sqlFoto);
+            $resultado->execute(array(":email" => $email));
+            while ($registro = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                $foto = $registro['foto'];
+            }
+            echo '
+            <form action="contenido.php" method="POST">
+            <img class="avatar" alt="' . $foto . '" src="/blog/imagen/' . $foto . '" width="50px">
             <textarea rows="2" cols="30" name="comentario' . $idpub . '">¿Qué opinas?</textarea></br>
             <input class="botonDerecha" type="submit" value="Comentar">
-        </form></br>
-        <hr size="1px" color="black" />';
+            </form></br>
+            <hr size="1px" color="black" />';
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
     }
 
     function insertarComentarios($idpub) {
@@ -54,23 +69,13 @@ class Publicaciones_modelo {
 
     function mostrarComentarios($idpub) {
         try {
-            
-        } catch (Exception $ex) {
-            die('Error' . $ex->getMessage());
-            echo 'Línea del error: ' . $ex->getLine();
-        }
-    }
-
-    function recopilarPublicacionesInicio() {
-        try {
-            
-            $sqlConsultarUsuario = "SELECT * FROM publicaciones ORDER BY fecha DESC LIMIT 0,3"; //
-            $resultado = $this->db->prepare($sqlConsultarUsuario);
-            $resultado->execute(array());
+            $sqlComentarios = "SELECT * FROM comentarios WHERE idpub=:idpub"; //
+            $resultado = $this->db->prepare($sqlComentarios);
+            $resultado->execute(array(":idpub" => $idpub));
             while ($registro = $resultado->fetch(PDO::FETCH_ASSOC)) {
+
                 $foto = "";
                 $nombre = "";
-                $numComentarios = "0"; //Tengo que hacer un inner join para sacar el numero de comentarios
                 $fecha = $registro['fecha'];
                 $email = $registro['email'];
                 $texto = $registro['texto'];
@@ -82,11 +87,100 @@ class Publicaciones_modelo {
                     $nombre = $registro2['nombre'];
                     $foto = $registro2['foto'];
                 }
-                echo "<img class='avatarPublicacion' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='70px'><p><b>$nombre</b></p>"
-                . "<p>$fecha</p>"
+                echo "<img class='avatarComentario' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='40px'> <b>$nombre</b>"
+                . " $fecha"
+                . "<p class='textoComentario'>$texto</p><hr size='1px' color='black' />";
+            }
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
+    }
+
+    function recopilarPublicacionesInicio() {
+        try {
+            $sqlConsultarUsuario = "SELECT * FROM publicaciones ORDER BY fecha DESC LIMIT 0,3"; //
+            $resultado = $this->db->prepare($sqlConsultarUsuario);
+            $resultado->execute(array());
+            while ($registro = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                $numComentarios = "0";
+                $fecha = $registro['fecha'];
+                $email = $registro['email'];
+                $texto = $registro['texto'];
+                $idpub = $registro['idpub'];
+                $sql = "SELECT nombre, foto FROM usuarios WHERE email=:email;";
+                $resultado2 = $this->db->prepare($sql);
+                $resultado2->execute(array(":email" => $email));
+                while ($registro2 = $resultado2->fetch(PDO::FETCH_ASSOC)) {
+                    $nombre = $registro2['nombre'];
+                    $foto = $registro2['foto'];
+                }
+
+                $sql = "SELECT COUNT(*) FROM comentarios WHERE idpub=$idpub;";
+                $resultado3 = $this->db->prepare($sql);
+                $resultado3->execute(array());
+                $numComentarios = $resultado3->fetchColumn();
+
+                echo "<img class='avatarPublicacion' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='70px'> <b>$nombre</b>"
+                . " $fecha</br>"
                 . "<p class='textoPublicacion'>$texto</p>"
-                . "<p><b>Tienes " . $numComentarios . " comentarios</b></p></br>";
+                . "<p><b>Tiene " . $numComentarios . " comentarios</b></p><hr size='1px' color='black' />";
                 $this->hacerYMostrarComentarios($idpub);
+            }
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
+    }
+
+    function paginacion() {
+        try {
+            $tamanio_paginas = 3;
+            if (isset($_GET['pagina'])) {
+                if ($_GET['pagina'] == 1) {
+                    header("Location: paginacion.php");
+                } else {
+                    $pagina = $_GET['pagina'];
+                }
+            } else {
+                $pagina = 1;
+            }
+            $empezar_desde = ($pagina - 1) * $tamanio_paginas;
+
+            $sqlContar = "SELECT * FROM publicaciones";
+            $resultado = $this->db->prepare($sqlContar);
+            $resultado->execute(array());
+            $num_filas = $resultado->rowCount();
+            $total_paginas = ceil($num_filas / $tamanio_paginas);
+
+            $sqlPaginacion = "SELECT * FROM publicaciones ORDER BY fecha DESC LIMIT $empezar_desde, $tamanio_paginas";
+            $resultado2 = $this->db->prepare($sqlPaginacion);
+            $resultado2->execute(array());
+            while ($registro = $resultado2->fetch(PDO::FETCH_ASSOC)) {
+                $fecha = $registro['fecha'];
+                $email = $registro['email'];
+                $texto = $registro['texto'];
+                $idpub = $registro['idpub'];
+                $sql = "SELECT nombre, foto FROM usuarios WHERE email=:email;";
+                $resultado3 = $this->db->prepare($sql);
+                $resultado3->execute(array(":email" => $email));
+                while ($registro2 = $resultado3->fetch(PDO::FETCH_ASSOC)) {
+                    $nombre = $registro2['nombre'];
+                    $foto = $registro2['foto'];
+                }
+                $sql = "SELECT COUNT(*) FROM comentarios WHERE idpub=$idpub;";
+                $resultado4 = $this->db->prepare($sql);
+                $resultado4->execute(array());
+                $numComentarios = $resultado4->fetchColumn();
+
+                echo"<img class='avatarPublicacion' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='70px'> <b>$nombre</b>"
+                . " $fecha</br>"
+                . "<p class='textoPublicacion'>$texto</p>"
+                . "<p><b>Tiene " . $numComentarios . " comentarios</b></p><hr size='1px' color='black' />";
+                $this->hacerYMostrarComentarios($idpub);
+            }
+            for ($i = 1; $i <= $total_paginas; $i++) {
+                echo '<a href="?paginacion="' . $i . '">' . $i . '</a> ';
             }
         } catch (Exception $ex) {
             die('Error' . $ex->getMessage());
