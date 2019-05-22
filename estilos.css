@@ -1,12 +1,10 @@
 .divTitulo{
-    //position: fixed;
     top: 5px;
     left: 5px;
     float: left;
     width: 200px;
 }
 .divUsuario{
-    //position: fixed;
     top: 5px;
     right: 5px;
     float: right;
