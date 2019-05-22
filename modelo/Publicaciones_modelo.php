@@ -27,6 +27,13 @@ class Publicaciones_modelo {
         $this->hacerComentario($idpub);
         echo '</div>';
     }
+    function hacerYMostrarComentariosPaginacion($idpub) {
+        echo '<div class="cuerpoComentarios">';
+        $this->insertarComentarios($idpub);
+        $this->mostrarComentarios($idpub);
+        $this->hacerComentarioPaginacion($idpub);
+        echo '</div>';
+    }
 
     function hacerComentario($idpub) {
         try {
@@ -39,6 +46,27 @@ class Publicaciones_modelo {
             }
             echo '
             <form action="contenido.php" method="POST">
+            <img class="avatar" alt="' . $foto . '" src="/blog/imagen/' . $foto . '" width="50px">
+            <textarea rows="2" cols="30" name="comentario' . $idpub . '">¿Qué opinas?</textarea></br>
+            <input class="botonDerecha" type="submit" value="Comentar">
+            </form></br>
+            <hr size="1px" color="black" />';
+        } catch (Exception $ex) {
+            die('Error' . $ex->getMessage());
+            echo 'Línea del error: ' . $ex->getLine();
+        }
+    }
+    function hacerComentarioPaginacion($idpub) {
+        try {
+            $email = $_SESSION['usuario'];
+            $sqlFoto = "SELECT foto FROM usuarios WHERE email=:email";
+            $resultado = $this->db->prepare($sqlFoto);
+            $resultado->execute(array(":email" => $email));
+            while ($registro = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                $foto = $registro['foto'];
+            }
+            echo '
+            <form action="paginacion.php" method="POST">
             <img class="avatar" alt="' . $foto . '" src="/blog/imagen/' . $foto . '" width="50px">
             <textarea rows="2" cols="30" name="comentario' . $idpub . '">¿Qué opinas?</textarea></br>
             <input class="botonDerecha" type="submit" value="Comentar">
@@ -89,7 +117,7 @@ class Publicaciones_modelo {
                 }
                 echo "<img class='avatarComentario' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='40px'> <b>$nombre</b>"
                 . " $fecha"
-                . "<p class='textoComentario'>$texto</p><hr size='1px' color='black' />";
+                . "<div class='textoComentarios'><p>$texto</p></div><hr size='1px' color='black' />";
             }
         } catch (Exception $ex) {
             die('Error' . $ex->getMessage());
@@ -123,7 +151,7 @@ class Publicaciones_modelo {
 
                 echo "<img class='avatarPublicacion' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='70px'> <b>$nombre</b>"
                 . " $fecha</br>"
-                . "<p class='textoPublicacion'>$texto</p>"
+                . "<div class='cuerpoPublicacion'><p>$texto</p></div>"
                 . "<p><b>Tiene " . $numComentarios . " comentarios</b></p><hr size='1px' color='black' />";
                 $this->hacerYMostrarComentarios($idpub);
             }
@@ -175,12 +203,12 @@ class Publicaciones_modelo {
 
                 echo"<img class='avatarPublicacion' alt='" . $foto . "' src='/blog/imagen/" . $foto . "' width='70px'> <b>$nombre</b>"
                 . " $fecha</br>"
-                . "<p class='textoPublicacion'>$texto</p>"
+                . "<div class='textoPublicacion'><p>$texto</p></div>"
                 . "<p><b>Tiene " . $numComentarios . " comentarios</b></p><hr size='1px' color='black' />";
-                $this->hacerYMostrarComentarios($idpub);
+                $this->hacerYMostrarComentariosPaginacion($idpub);
             }
             for ($i = 1; $i <= $total_paginas; $i++) {
-                echo '<a href="?paginacion="' . $i . '">' . $i . '</a> ';
+                echo '<a href="?pagina='.$i.'">' . $i . '</a> ';
             }
         } catch (Exception $ex) {
             die('Error' . $ex->getMessage());

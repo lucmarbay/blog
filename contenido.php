@@ -1,44 +1,10 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title></title>
-        <style>
-            .divTitulo{
-                position: fixed;
-                top: 5px;
-                left: 5px;
-                float: left;
-                width: 200px;
-            }
-            .divUsuario{
-                position: fixed;
-                top: 5px;
-                right: 5px;
-                float: right;
-                width: 200px;
-            }
-            .avatar{
-                position: relative;
-            }
-            a.enlaceInicio:link{
-                text-decoration:none;
-            }
-            .botonDerecha{
-                float: right;
-            }
-            .cuerpoCentral{
-                position: fixed;
-                top: 200px;
-                right: 200px;
-                left: 200px;
-            }
-            .textoPublicacion{
-                background-color: 8cfbf3;
-            }
-            .cuerpoComentarios{
-                margin-left: 100px;
-            }
-        </style>
+        <link rel="stylesheet" href="estilos.css">
+
     </head>
     <body>
         <?php
@@ -59,11 +25,6 @@
             $publicacionesControlador->mostrarPublicacionesInicio();
             $publicacionesControlador->mostrarPaginacion();
             ?>
-            
         </div>
-        
-
-
-
     </body>
 </html>

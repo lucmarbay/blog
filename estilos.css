@@ -1,0 +1,42 @@
+.divTitulo{
+    //position: fixed;
+    top: 5px;
+    left: 5px;
+    float: left;
+    width: 200px;
+}
+.divUsuario{
+    //position: fixed;
+    top: 5px;
+    right: 5px;
+    float: right;
+    width: 200px;
+}
+.avatar{
+    position: relative;
+}
+a.enlaceInicio:link{
+    text-decoration:none;
+}
+.botonDerecha{
+    float: right;
+}
+.cuerpoCentral{
+    position: relative;
+    top: 200px;
+    right: 12%;
+    left: 12%;
+    width: 75%;
+}
+.cuerpoPublicacion{
+    background-color: #DBEBF6;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.textoComentarios{
+
+}
+.cuerpoComentarios{
+    margin-left: 100px;
+    background-color: #EFF6FC;
+}

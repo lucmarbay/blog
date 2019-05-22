@@ -13,6 +13,6 @@ class Publicaciones_vista{
                 . "<p>Tienes ".$numComentarios." comentarios</p>";
     }
     function enlacePaginacion() {
-        echo '<a href="paginacion.php">MOSTRAR PUBLICACIONES ANTIGUAS</a>';
+        echo '</br><a href="paginacion.php">MOSTRAR PUBLICACIONES ANTIGUAS</a></br>';
     }
 }
